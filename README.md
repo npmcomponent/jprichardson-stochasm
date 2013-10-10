@@ -58,8 +58,6 @@ Install
 
 
 
-`Stochator` is a tiny library providing for creating a variety of random value generators.
-
 To create a `Stochator` object, simply invoke the constructor and pass it an `options` object with a `kind` property. If not provided, kind is 'float'.
 
 Valid kinds include `float`, `integer`, `set`, `color`, `a-z` and `A-Z`.
@@ -172,29 +170,7 @@ var hisChore = chores.next(); // "dishes"
 var noOnesChore = chores.next(); // undefined
 ````
 
-## From predefined sets
-At present, predefined sets include `"a-z"`, `"A-Z"` and `"color"`.
 
-````js
-var colorGenerator = new Stochator({
-	kind: "color"
-});
-colorGenerator.next(); // { red: 122, green: 200, blue: 121 }
-colorGenerator.next(); // { red: 129, green: 89, blue: 192 }
-colorGenerator.next(); // { red: 125, green: 211, blue: 152 }
-````
-
-Note that this example passes an integer argument `n` to `next` which causes
-the stochator to return an array with the result of `n` calls to the generator.
-
-````js
-var characterGenerator = new Stochator({
-	kind: "a-z"
-});
-characterGenerator.next(25).join(""); // "uktlbkgufzjiztatmqelawfez"
-characterGenerator.next(25).join(""); // "wdhygotehcfmrkjyuuovztxla"
-characterGenerator.next(25).join(""); // "mbjxkhflycpxgdrtyyyevasga"
-````
 
 ## Mutators
 The constructor accepts an optional final argument which is passed the output
