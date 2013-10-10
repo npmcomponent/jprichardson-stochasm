@@ -77,7 +77,7 @@ describe('+ stochasm', function() {
 
       Object.keys(counts).forEach(function(n) {
         var count = counts[n]
-        count.should.be.approximately(SAMPLE_SIZE / 6, SAMPLE_SIZE*0.01)
+        count.should.be.approximately(SAMPLE_SIZE / 6, SAMPLE_SIZE*0.03)
       })
     })
   })
@@ -101,7 +101,7 @@ describe('+ stochasm', function() {
 
       Object.keys(counts).forEach(function(d) {
         var count = counts[d]
-        count.should.be.approximately(SAMPLE_SIZE / 7, SAMPLE_SIZE*0.01)
+        count.should.be.approximately(SAMPLE_SIZE / 7, SAMPLE_SIZE*0.03)
       })      
     })
   })
@@ -128,11 +128,78 @@ describe('+ stochasm', function() {
         if (d == 'sa' || d == 'su') return
 
         var count = counts[d]
-        count.should.be.approximately(SAMPLE_SIZE*0.1, SAMPLE_SIZE*0.01)
+        count.should.be.approximately(SAMPLE_SIZE*0.1, SAMPLE_SIZE*0.03)
       })
 
-      counts['sa'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.01)
-      counts['su'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.01)
+      counts['sa'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.03)
+      counts['su'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.03)
+    })
+  })
+
+  describe('> when a mutator function is specified', function() {
+    it('should create a function that generates values according to the mutator', function() {
+      function mutate (val) {
+        return val >= 0 ? '+' : '-' //slight bias towards positive because ">= 0"
+      }
+
+      var pnGen = stochasm({kind: 'float', min: -1.0, max: 1.0}, mutate)
+      var vals = pnGen.next(SAMPLE_SIZE)
+
+      var counts = {'-': 0, '+': 0}
+      vals.forEach(function(v) { counts[v] += 1 })
+
+      Object.keys(counts).forEach(function(v) {
+        var count = counts[v]
+        count.should.be.approximately(SAMPLE_SIZE / 2, SAMPLE_SIZE*0.03)
+      }) 
+    })
+  })
+
+  describe('> when a mutator function is specified with an initial value', function() {
+    it('should create a function that generates values according to the mutator and initial value', function() {
+      var min = 1.01
+      var max = 1.05
+      var initVal = 1000
+      var annualSavings = 250
+
+      //models a bank account: how much money after 10 years if you add 250 a month, have a random interest rate from 1% to 5%
+      function addInterest(interestRate, principal) {
+        return (principal + annualSavings) * interestRate
+      }
+
+      var savingsAccount = stochasm({kind: 'float', min: min, max: max}, addInterest)
+      savingsAccount.value = initVal
+      
+      var amounts = savingsAccount.next(10) //amounts for 10 years
+      for (var i = 0; i < amounts.length; ++i) {
+        var err = Math.pow(1 + (max - min)/2, 1+i)
+        var x = (initVal + (i+1)*annualSavings) * err
+        //console.log("real %d should be close to estimate %d", amounts[i], x)
+        amounts[i].should.be.approximately(x, annualSavings*err*1.03)
+      }
+    })
+  })
+
+  describe('> when multiple generators are are input', function() {
+    it('should create a function that generates multiple values governed by the configuration', function() {
+      var x = { kind: 'integer', min: 0, max: 1400 };
+      var y = { kind: 'integer', min: 0, max: 900 };
+      var mutator = function(values) {
+        return {
+          x: values[0],
+          y: values[1]
+        }
+      }
+
+      var randomPoint = stochasm(x, y, mutator)
+      var pts = randomPoint.next(SAMPLE_SIZE)
+
+      _.min(pts, function(pt) { return pt.x }).x.should.be.approximately(0, 10)
+      _.min(pts, function(pt) { return pt.y }).y.should.be.approximately(0, 10)
+      _.max(pts, function(pt) { return pt.x }).x.should.be.approximately(1400, 10)
+      _.max(pts, function(pt) { return pt.y }).y.should.be.approximately(900, 10)
     })
   })
 })
+
+
