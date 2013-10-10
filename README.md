@@ -24,6 +24,36 @@ Rather than pester Eric about changing any of the above, a fork seemed more reas
 
 
 
+Name
+----
+
+`stochasm` is a portmanteau of stochastic and chasm.
+
+
+
+Install
+-------
+
+### Node.js/Browserify
+
+    npm install --save stochasm
+
+
+### Component
+
+    component install jprichardson/stochasm
+
+
+### Bower
+
+    bower install stochasm
+
+
+### Script
+
+```html
+<script src="/path/to/stochasm.js"></script>
+```
 
 
 
