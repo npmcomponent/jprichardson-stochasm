@@ -81,4 +81,58 @@ describe('+ stochasm', function() {
       })
     })
   })
+
+  describe('> when the kind is a set', function() {
+    it('should create a function that generates set items', function() {
+      var dayGenerator = stochasm({
+        kind: "set",
+        values: ["m", "t", "w", "r", "f", "sa", "su"]
+      })
+     
+      var vals = []
+      for (var i = 0; i < SAMPLE_SIZE; ++i) {
+        vals.push(dayGenerator.next())
+      }
+
+      var counts = {'m': 0, 't': 0, 'w': 0, 'r': 0, 'f': 0, 'sa': 0, 'su': 0}
+      vals.forEach(function(d) {
+        counts[d] += 1
+      })
+
+      Object.keys(counts).forEach(function(d) {
+        var count = counts[d]
+        count.should.be.approximately(SAMPLE_SIZE / 7, SAMPLE_SIZE*0.01)
+      })      
+    })
+  })
+
+  describe('> when the kind is a set with weights', function() {
+    it('should create a function that generates set items according to weight', function() {
+      var dayGenerator = stochasm({
+        kind: "set",
+        values: ["m", "t", "w", "r", "f", "sa", "su"],
+        weights: [0.1, 0.1, 0.1, 0.1, 0.1, 0.25, 0.25] //favor weekends
+      })
+      
+      var vals = []
+      for (var i = 0; i < SAMPLE_SIZE; ++i) {
+        vals.push(dayGenerator.next())
+      }
+
+      var counts = {'m': 0, 't': 0, 'w': 0, 'r': 0, 'f': 0, 'sa': 0, 'su': 0}
+      vals.forEach(function(d) {
+        counts[d] += 1
+      })
+
+      Object.keys(counts).forEach(function(d) {
+        if (d == 'sa' || d == 'su') return
+
+        var count = counts[d]
+        count.should.be.approximately(SAMPLE_SIZE*0.1, SAMPLE_SIZE*0.01)
+      })
+
+      counts['sa'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.01)
+      counts['su'].should.be.approximately(SAMPLE_SIZE*0.25, SAMPLE_SIZE*0.01)
+    })
+  })
 })
