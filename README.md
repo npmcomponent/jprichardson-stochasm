@@ -1,6 +1,32 @@
-[Download](https://github.com/downloads/heydenberk/stochator/stochator.js) the latest compiled version of stochator.js (0.3.3).
+Stochasm
+========
 
-# Stochator
+A JavaScript component to create functions that generate random values.
+
+
+Why?
+----
+
+It can be very useful to generate random numbers that are governed by properties of different types of distributions. Such distributions are useful for modeling numerical behavior and response of systems.
+
+
+
+Fork
+----
+
+This module was forked from https://github.com/heydenberk/stochator that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Why did I fork it?
+
+- Unmaintained
+- Written in CoffeeScript
+- Not a UMD
+
+Rather than pester Eric about changing any of the above, a fork seemed more reasonable.
+
+
+
+
+
+
 
 `Stochator` is a tiny library providing for creating a variety of random value generators.
 
