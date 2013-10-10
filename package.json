@@ -21,5 +21,10 @@
     "distribution"
   ],
   "author": "JP Richardson",
-  "license": "MPLv2"
+  "license": "MPLv2",
+  "devDependencies": {
+    "should": "~1.3.0",
+    "mocha": "*",
+    "chi-square": "0.0.1"
+  }
 }
