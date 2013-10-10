@@ -19,6 +19,7 @@ This module was forked from https://github.com/heydenberk/stochator that was cre
 - Unmaintained
 - Written in CoffeeScript
 - Not a UMD
+- No tests
 
 Rather than pester Eric about changing any of the above, a fork seemed more reasonable.
 
