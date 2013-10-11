@@ -312,7 +312,7 @@ radianGenerator.rand = function() { return 0.4 }
 Credits
 -------
 
-As stated above, this code was forked from the Node.js module `stochator` (https://github.com/heydenberk/stochasm) that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Eric Heydenberk deserves much of the credit for coming up with such an awesome idea.
+As stated above, this code was forked from the Node.js module `stochator` (https://github.com/heydenberk/stochator) that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Eric Heydenberk deserves much of the credit for coming up with such an awesome idea.
 
 
 
