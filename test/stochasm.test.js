@@ -59,7 +59,8 @@ describe('+ stochasm', function() {
   //will probably remove the ability to use "kinds" and to use custom named functions
   describe('> when the kind is an integer', function() {
     it('should create a function that generates bounded integers', function() {
-      var generator = stochasm({kind: "integer", min: 1, max: 6}, 'roll')
+      var generator = stochasm({kind: "integer", min: 1, max: 6})
+      generator.roll = generator.next
       var vals = []
       for (var i = 0; i < SAMPLE_SIZE; ++i) {
         vals.push(generator.roll())

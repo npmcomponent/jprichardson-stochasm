@@ -117,6 +117,13 @@ die.next(); // 1
 die.next(); // 2
 ````
 
+if `next()` feels out of place for your use case, just rename the method:
+
+```js
+die.roll = die.next
+die.roll() //4
+```
+
 ## Multiple results
 If the `next` method (or a method aliased to it) is passed an integer `n`, it will return an n-length array of results. Using the die instance from the previous example:
 
