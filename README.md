@@ -57,6 +57,13 @@ Install
 ```
 
 
+Usage
+-----
+
+See tests file for current usage.
+
+Note: `v0.4.0` is an itermediary release.
+
 
 
 To create a `Stochator` object, simply invoke the constructor and pass it an `options` object with a `kind` property. If not provided, kind is 'float'.
