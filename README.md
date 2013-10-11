@@ -70,6 +70,8 @@ Valid kinds include `float`, `integer`, `set`.
 It's very easy generate a float between 0 and 1.
 
 ````js
+var stochasm = require('stochasm')
+
 var generator = stochasm()
 generator.next(); // 0.9854211050551385
 generator.next(); // 0.8784450970124453
@@ -80,7 +82,7 @@ This is not very exciting because it simply wraps the built-in `Math.random` met
 
 
 
-## Floats from an Interval
+### Floats from an Interval
 
 Specifying a min and a max allows us to create random numbers in the interval (min, max), not inclusive.
 
@@ -93,7 +95,7 @@ radianGenerator.next(); // 4.012664264853087
 
 
 
-## Floats from a Normal Distribution
+### Floats from a Normal Distribution
 
 We can also generate random floats from a normal distribution. Min and max are optional, and when provided will result in truncation of all results outside of [min, max].
 
@@ -106,7 +108,7 @@ testScores.next(); // 75.81242027226946
 
 
 
-## Integers
+### Integers
 
 For integers, the interval [min, max] is inclusive.
 
@@ -124,7 +126,7 @@ die.roll = die.next
 die.roll() //4
 ```
 
-## Multiple results
+## Multiple Results
 If the `next` method (or a method aliased to it) is passed an integer `n`, it will return an n-length array of results. Using the die instance from the previous example:
 
 ````js
@@ -134,7 +136,8 @@ die.roll(5); // [6, 3, 6, 6, 5]
 ````
 
 
-## From sets
+### From Sets
+
 We can generate random values from arbitary sets.
 
 ````js
@@ -147,7 +150,10 @@ dayGenerator.next(); // monday
 dayGenerator.next(); // monday
 ````
 	
-## From sets with weights
+
+
+### From Sets with Weights
+
 What if we favor the weekend? Well, we can pass `weights`, an array of the same length as `values` consisting of probabilities out of 1 that correspond to `values`.
 
 ````js
@@ -161,7 +167,12 @@ biasedDayGenerator.next(); // sunday
 biasedDayGenerator.next(); // saturday
 ````
 
-## From sets without replacement
+
+
+### From Sets Without Replacement
+
+Note: This functionality may be removed.
+
 Passing a `replacement` property with a falsy value will result in each random
 value generation to be removed from the set.
 
@@ -179,7 +190,9 @@ var noOnesChore = chores.next(); // undefined
 
 
 
-## Mutators
+### Mutators
+
+
 The constructor accepts an optional final argument which is passed the output
 of the random value generator. Its return value becomes the return value of
 next or its alias. To generate random boolean values, we can do:
@@ -255,8 +268,11 @@ savingsAccountBalance.next(10);
 */
 ````
 
-## Multiple generators
-If the stochasm constructor is passed multiple configuration objects, `next` (or its alias) returns an array of each random generated value.
+
+
+### Multiple Generators
+
+If the stochasm function is passed multiple configuration objects, `next` (or its alias) returns an array of each random generated value.
 
 To generate a random point, we might do:
 
@@ -275,3 +291,22 @@ randomPoint.next(); // { x: 79, y: 65 }
 randomPoint.next(); // { x: 151, y: 283 }
 randomPoint.next(); // { x: 5, y: 253 }
 ````
+
+
+### Your Own Random Number Generator
+
+Want to bring your own random number generator to the party? Whether you're working with Node.js and want to use `crypto.getRandomValues()` or in the browser and want to use `window.crypto.getRandomValues()`, you can. You could also return a constant to see how your system may respond to certain conditions in testing.
+
+Note: At this time, it's assumed that any function that you set `rand` to will return a number in the range of `[0,1)`.
+
+
+```js
+var stochasm = require('stochasm')
+
+var radianGenerator = stochasm({min: 0, max: Math.PI * 2})
+radianGenerator.rand = function() { return 0.4 }
+```
+
+
+
+
