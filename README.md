@@ -14,7 +14,7 @@ It can be very useful to generate random numbers that are governed by properties
 Fork
 ----
 
-This module was forked from https://github.com/heydenberk/stochator that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Why did I fork it?
+This module was forked from https://github.com/heydenberk/stochasm that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Why did I fork it?
 
 - Unmaintained
 - Written in CoffeeScript
@@ -60,21 +60,17 @@ Install
 Usage
 -----
 
-See tests file for current usage.
+To create a `stochasm` object, simply invoke the function and pass it an `options` object with a `kind` property. If not provided, kind is 'float'.
 
-Note: `v0.4.0` is an itermediary release.
+Valid kinds include `float`, `integer`, `set`.
 
 
+### Floating-point Decimals
 
-To create a `Stochator` object, simply invoke the constructor and pass it an `options` object with a `kind` property. If not provided, kind is 'float'.
-
-Valid kinds include `float`, `integer`, `set`, `color`, `a-z` and `A-Z`.
-
-## Floating-point decimals
 It's very easy generate a float between 0 and 1.
 
 ````js
-var generator = new Stochator({});
+var generator = stochasm()
 generator.next(); // 0.9854211050551385
 generator.next(); // 0.8784450970124453
 generator.next(); // 0.1592887439765036
@@ -83,46 +79,42 @@ generator.next(); // 0.1592887439765036
 This is not very exciting because it simply wraps the built-in `Math.random` method.
 
 
-## Floats from an interval
+
+## Floats from an Interval
+
 Specifying a min and a max allows us to create random numbers in the interval (min, max), not inclusive.
 
 ````js
-var radianGenerator = new Stochator({
-	min: 0,
-	max: Math.PI * 2
-});
+var radianGenerator = stochasm({min: 0, max: Math.PI * 2})
 radianGenerator.next(); // 3.7084574239999655
 radianGenerator.next(); // 1.021138034566463
 radianGenerator.next(); // 4.012664264853087
 ````
 
-## Floats from a normal distribution
+
+
+## Floats from a Normal Distribution
+
 We can also generate random floats from a normal distribution. Min and max are optional, and when provided will result in truncation of all results outside of [min, max].
 
 ````js
-var testScores = new Stochator({
-	mean: 75,
-	stdev: 14,
-	min: 0,
-	max: 100
-});
+var testScores = stochasm({mean: 75, stdev: 14, min: 0, max: 100})
 testScores.next(); // 59.437160028200125
 testScores.next(); // 80.18612670399554
 testScores.next(); // 75.81242027226946
 ````
 
+
+
 ## Integers
-For integers, the interval [min, max] is inclusive. Notice that the optional argument `name` allows us to alias `next` to a more descriptive method name.
+
+For integers, the interval [min, max] is inclusive.
 
 ````js
-var die = new Stochator({
-	kind: "integer",
-	min: 1,
-	max: 6
-}, "roll");
-die.roll(); // 6
-die.roll(); // 1
-die.roll(); // 2
+var die = stochasm({kind: "integer", min: 1, max: 6})
+die.next(); // 6
+die.next(); // 1
+die.next(); // 2
 ````
 
 ## Multiple results
@@ -139,7 +131,7 @@ die.roll(5); // [6, 3, 6, 6, 5]
 We can generate random values from arbitary sets.
 
 ````js
-var dayGenerator = new Stochator({
+var dayGenerator = new stochasm({
 	kind: "set",
 	values: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 });
@@ -152,7 +144,7 @@ dayGenerator.next(); // monday
 What if we favor the weekend? Well, we can pass `weights`, an array of the same length as `values` consisting of probabilities out of 1 that correspond to `values`.
 
 ````js
-var biasedDayGenerator = new Stochator({
+var biasedDayGenerator = new stochasm({
 	kind: "set",
 	values: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
 	weights: [0.1, 0.1, 0.1, 0.1, 0.1, 0.25, 0.25]
@@ -167,7 +159,7 @@ Passing a `replacement` property with a falsy value will result in each random
 value generation to be removed from the set.
 
 ````js
-var chores = new Stochator({
+var chores = new stochasm({
 	kind: "set",
 	values: ["floors", "windows", "dishes"],
 	replacement: false
@@ -186,7 +178,7 @@ of the random value generator. Its return value becomes the return value of
 next or its alias. To generate random boolean values, we can do:
 
 ````js
-var booleanGenerator = new Stochator({
+var booleanGenerator = new stochasm({
 	kind: "integer",
 	min: 0,
 	max: 1
@@ -200,7 +192,7 @@ booleanGenerator.next(); // true
 We can map the previously mentioned `radianGenerator` to the cosine of its values.
 
 ````js
-var radianSineGenerator = new Stochator({
+var radianSineGenerator = new stochasm({
 	min: 0,
 	max: Math.PI * 2
 }, Math.cos);
@@ -209,12 +201,12 @@ radianSineGenerator.next(); // -0.6424354006937544
 radianSineGenerator.next(); // 0.6475980728835664
 ````
 
-Mutators remember their previous result and, at each generation, apply the results of a specified stochator to create a new result.
+Mutators remember their previous result and, at each generation, apply the results of a specified stochasm to create a new result.
 
  _(This is functionally equivalent to a Markov chain.)_
 
 ````js
-var drunkardsWalk = new Stochator({
+var drunkardsWalk = new stochasm({
 	kind: "integer",
 	min: -1,
 	max: 1
@@ -232,7 +224,7 @@ Let's model a bank account's balance. How much money might you have after 10 yea
 var addInterest = function(interestRate, principal) {
 	return (principal + 1000) * interestRate;
 };
-var savingsAccountBalance = new Stochator({
+var savingsAccountBalance = new stochasm({
 	kind: "float",
 	min: 1.01,
 	max: 1.05
@@ -257,7 +249,7 @@ savingsAccountBalance.next(10);
 ````
 
 ## Multiple generators
-If the Stochator constructor is passed multiple configuration objects, `next` (or its alias) returns an array of each random generated value.
+If the stochasm constructor is passed multiple configuration objects, `next` (or its alias) returns an array of each random generated value.
 
 To generate a random point, we might do:
 
@@ -270,7 +262,7 @@ var mutator = function(values) {
 		y: values[1]
 	};
 };
-var randomPoint = new Stochator(x, y, mutator);
+var randomPoint = new stochasm(x, y, mutator);
 
 randomPoint.next(); // { x: 79, y: 65 }
 randomPoint.next(); // { x: 151, y: 283 }
