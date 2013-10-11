@@ -2,7 +2,6 @@ var should = require('should')
   , stochasm = require('../lib/stochasm')
   , u = require('./util')
   , _ = require('lodash')
-  , cs = require('chi-square')
 
 var SAMPLE_SIZE = 10000//00
 

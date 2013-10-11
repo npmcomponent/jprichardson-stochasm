@@ -25,7 +25,6 @@
   "devDependencies": {
     "should": "~1.3.0",
     "mocha": "*",
-    "chi-square": "0.0.1",
     "lodash": "~2.2.1"
   }
 }
