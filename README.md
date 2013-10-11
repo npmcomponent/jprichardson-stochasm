@@ -20,6 +20,7 @@ This module was forked from https://github.com/heydenberk/stochasm that was crea
 - Written in CoffeeScript
 - Not a UMD
 - No tests
+- No support to modify the random number generation
 
 Rather than pester Eric about changing any of the above, a fork seemed more reasonable.
 
@@ -308,5 +309,20 @@ radianGenerator.rand = function() { return 0.4 }
 ```
 
 
+Credits
+-------
+
+As stated above, this code was forked from the Node.js module `stochator` (https://github.com/heydenberk/stochasm) that was created by [Eric Heydenberk](http://twitter.com/heydenberk). Eric Heydenberk deserves much of the credit for coming up with such an awesome idea.
+
+
+
+License
+-------
+
+It made sense to just keep the license the same. MPLv2.
+
+(MPLv2 License)
+
+Copyright 2013, Eric Heydenberk and JP Richardson
 
 
